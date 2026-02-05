@@ -14,5 +14,5 @@ services:
     image: ghcr.io/tinnghiaauto/admin-tinnghia-web:${ADMIN_TINNGHIA_WEB_TAG}
     container_name: admin_tinnghia_web
     ports:
-      - "8080:80"
+      - "3001:80"
     restart: always
