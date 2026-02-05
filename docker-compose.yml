@@ -9,6 +9,17 @@ services:
     ports:
       - "7001:7001"
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/health"] # Giả sử có endpoint /health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   web:
     image: ghcr.io/tinnghiaauto/admin-tinnghia-web:${ADMIN_TINNGHIA_WEB_TAG}
@@ -16,3 +27,14 @@ services:
     ports:
       - "3001:80"
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

@@ -65,6 +65,16 @@ jobs:
           docker compose pull
           docker compose up -d --remove-orphans
 
+      - name: Cleanup old images
+        run: |
+          docker image prune -af
+
+      - name: Wait for healthy services
+        run: |
+          echo "Waiting for services to be healthy..."
+          sleep 10
+          docker ps --format "table {{.Names}}\t{{.Status}}"
+
       - name: Show running containers
         run: |
           docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
