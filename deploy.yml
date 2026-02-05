@@ -1,0 +1,66 @@
+name: Deploy on VPS (self-hosted)
+
+on:
+  repository_dispatch:
+    types: [deploy]
+
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout deploy repo
+        uses: actions/checkout@v4
+
+      - name: Sync deploy files to /opt/tinnghiaauto (keep .env)
+        run: |
+          mkdir -p /opt/tinnghiaauto
+          rsync -a --delete \
+            --exclude ".env" \
+            --exclude ".git" \
+            ./ /opt/tinnghiaauto/
+
+      - name: Update tags in /opt/tinnghiaauto/.env
+        run: |
+          ENV_FILE="/opt/tinnghiaauto/.env"
+          touch "$ENV_FILE"
+
+          SERVICE="${{ github.event.client_payload.service }}"
+          TAG="${{ github.event.client_payload.tag }}"
+
+          if [ -z "$SERVICE" ] || [ -z "$TAG" ]; then
+            echo "Missing payload: service/tag"
+            exit 1
+          fi
+
+          set_kv() {
+            KEY="$1"
+            VALUE="$2"
+            if grep -q "^${KEY}=" "$ENV_FILE"; then
+              sed -i "s/^${KEY}=.*/${KEY}=${VALUE}/" "$ENV_FILE"
+            else
+              echo "${KEY}=${VALUE}" >> "$ENV_FILE"
+            fi
+          }
+
+          if [ "$SERVICE" = "admin-tinnghia-web" ]; then
+            set_kv "ADMIN_TINNGHIA_WEB_TAG" "$TAG"
+          elif [ "$SERVICE" = "admin-tinnghia-api" ]; then
+            set_kv "ADMIN_TINNGHIA_API_TAG" "$TAG"
+          else
+            echo "Unknown service: $SERVICE"
+            exit 1
+          fi
+
+          echo "---- Current tags ----"
+          grep -E '^(ADMIN_TINNGHIA_WEB_TAG|ADMIN_TINNGHIA_API_TAG)=' "$ENV_FILE" || true
+
+      - name: Pull & Up
+        working-directory: /opt/tinnghiaauto
+        run: |
+          docker compose pull
+          docker compose up -d --remove-orphans
