@@ -24,23 +24,6 @@ jobs:
             --exclude ".git" \
             ./ /opt/tinnghiaauto/
 
-      - name: Checkout Admin_TinNghia (Web)
-        if: github.event.client_payload.service == 'admin-tinnghia-web'
-        uses: actions/checkout@v4
-        with:
-          repository: DiMinhKhoi/Admin_TinNghia
-          token: ${{ secrets.DEPLOY_REPO_TOKEN }}
-          path: Admin_TinNghia
-
-      - name: Build Web Image Locally
-        if: github.event.client_payload.service == 'admin-tinnghia-web'
-        run: |
-          TAG="${{ github.event.client_payload.tag }}"
-          IMAGE="ghcr.io/diminhkhoi/admin-tinnghia-web"
-          cd Admin_TinNghia
-          docker build -t $IMAGE:$TAG -t $IMAGE:latest .
-          echo "Built $IMAGE:$TAG locally"
-
       - name: Update tags in /opt/tinnghiaauto/.env
         run: |
           ENV_FILE="/opt/tinnghiaauto/.env"
@@ -79,8 +62,7 @@ jobs:
       - name: Pull & Up
         working-directory: /opt/tinnghiaauto
         run: |
-          # Pull images that are NOT built locally (like API if only updating Web)
-          docker compose pull api || true
+          docker compose pull
           docker compose up -d --remove-orphans
 
       - name: Cleanup old images

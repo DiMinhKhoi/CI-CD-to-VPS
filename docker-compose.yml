@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # api:
   #   image: ghcr.io/tinnghiaauto/admin-tinnghia-api:${ADMIN_TINNGHIA_API_TAG}
