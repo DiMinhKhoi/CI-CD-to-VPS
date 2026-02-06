@@ -1,6 +1,6 @@
 services:
   # api:
-  #   image: ghcr.io/tinnghiaauto/admin-tinnghia-api:${ADMIN_TINNGHIA_API_TAG}
+  #   image: ghcr.io/diminhkhoi/admin-tinnghia-api:${ADMIN_TINNGHIA_API_TAG}
   #   container_name: admin_tinnghia_api
   #   env_file:
   #     - .env
@@ -20,7 +20,7 @@ services:
   #     start_period: 40s
 
   web:
-    image: ghcr.io/tinnghiaauto/admin-tinnghia-web:${ADMIN_TINNGHIA_WEB_TAG}
+    image: ghcr.io/diminhkhoi/admin-tinnghia-web:${ADMIN_TINNGHIA_WEB_TAG}
     container_name: admin_tinnghia_web
     ports:
       - "3001:80"
