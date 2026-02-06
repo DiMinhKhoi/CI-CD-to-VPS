@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     ports:
-      - "7001:7001"
+      - "9000:9000"
     restart: always
     logging:
       driver: "json-file"
@@ -15,7 +15,7 @@ services:
         max-size: "10m"
         max-file: "3"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7001/health"] # Giả sử có endpoint /health
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"] # Giả sử có endpoint /health
       interval: 30s
       timeout: 10s
       retries: 3
