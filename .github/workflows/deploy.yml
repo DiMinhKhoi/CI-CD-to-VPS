@@ -36,7 +36,7 @@ jobs:
         if: github.event.client_payload.service == 'admin-tinnghia-web'
         run: |
           TAG="${{ github.event.client_payload.tag }}"
-          IMAGE="ghcr.io/DiMinhKhoi/admin-tinnghia-web"
+          IMAGE="ghcr.io/diminhkhoi/admin-tinnghia-web"
           cd Admin_TinNghia
           docker build -t $IMAGE:$TAG -t $IMAGE:latest .
           echo "Built $IMAGE:$TAG locally"
