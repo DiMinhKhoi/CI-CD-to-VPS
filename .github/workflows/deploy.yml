@@ -28,7 +28,7 @@ jobs:
         if: github.event.client_payload.service == 'admin-tinnghia-web'
         uses: actions/checkout@v4
         with:
-          repository: tinnghiaauto/Admin_TinNghia
+          repository: DiMinhKhoi/Admin_TinNghia
           token: ${{ secrets.DEPLOY_REPO_TOKEN }}
           path: Admin_TinNghia
 
@@ -36,7 +36,7 @@ jobs:
         if: github.event.client_payload.service == 'admin-tinnghia-web'
         run: |
           TAG="${{ github.event.client_payload.tag }}"
-          IMAGE="ghcr.io/tinnghiaauto/admin-tinnghia-web"
+          IMAGE="ghcr.io/DiMinhKhoi/admin-tinnghia-web"
           cd Admin_TinNghia
           docker build -t $IMAGE:$TAG -t $IMAGE:latest .
           echo "Built $IMAGE:$TAG locally"
