@@ -1,23 +1,23 @@
 services:
-  # api:
-  #   image: ghcr.io/diminhkhoi/admin-tinnghia-api:${ADMIN_TINNGHIA_API_TAG}
-  #   container_name: admin_tinnghia_api
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "9000:9000"
-  #   restart: always
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:9000/health"] # Giả sử có endpoint /health
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 40s
+  api:
+    image: ghcr.io/diminhkhoi/admin-tinnghia-api:${ADMIN_TINNGHIA_API_TAG}
+    container_name: admin_tinnghia_api
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"] # Giả sử có endpoint /health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   web:
     image: ghcr.io/diminhkhoi/admin-tinnghia-web:${ADMIN_TINNGHIA_WEB_TAG}
