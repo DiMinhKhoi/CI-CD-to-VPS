@@ -59,6 +59,10 @@ jobs:
           echo "---- Current tags ----"
           grep -E '^(ADMIN_TINNGHIA_WEB_TAG|ADMIN_TINNGHIA_API_TAG)=' "$ENV_FILE" || true
 
+      - name: Login to GitHub Container Registry
+        run: |
+          echo "${{ secrets.DEPLOY_REPO_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Pull & Up
         working-directory: /opt/tinnghiaauto
         run: |
